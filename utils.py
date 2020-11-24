@@ -63,14 +63,8 @@ def runkMeans(X, centroids, findClosestCentroids, computeCentroids,
 
         centroids = computeCentroids(X, idx, K)
 
-    if plot_progress:
-        fig = pyplot.figure()
-        anim = FuncAnimation(fig, plotProgresskMeans,
-                             frames=max_iters,
-                             interval=500,
-                             repeat_delay=2,
-                             fargs=(X, centroid_history, idx_history))
-        return centroids, idx, anim
+   
+        return centroids, idx
 
     return centroids, idx
 

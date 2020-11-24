@@ -6,6 +6,72 @@ from scipy.io import loadmat
 from os.path import join
 from matplotlib import pyplot
 
+def runkMeans(X, centroids, findClosestCentroids, computeCentroids,
+              max_iters=10, plot_progress=False):
+    """
+    Runs the K-means algorithm.
+
+    Parameters
+    ----------
+    X : array_like
+        The data set of size (m, n). Each row of X is a single example of n dimensions. The
+        data set is a total of m examples.
+
+    centroids : array_like
+        Initial centroid location for each clusters. This is a matrix of size (K, n). K is the total
+        number of clusters and n is the dimensions of each data point.
+
+    findClosestCentroids : func
+        A function (implemented by student) reference which computes the cluster assignment for
+        each example.
+
+    computeCentroids : func
+        A function(implemented by student) reference which computes the centroid of each cluster.
+
+    max_iters : int, optional
+        Specifies the total number of interactions of K-Means to execute.
+
+    plot_progress : bool, optional
+        A flag that indicates if the function should also plot its progress as the learning happens.
+        This is set to false by default.
+
+    Returns
+    -------
+    centroids : array_like
+        A (K x n) matrix of the computed (updated) centroids.
+    idx : array_like
+        A vector of size (m,) for cluster assignment for each example in the dataset. Each entry
+        in idx is within the range [0 ... K-1].
+
+    anim : FuncAnimation, optional
+        A matplotlib animation object which can be used to embed a video within the jupyter
+        notebook. This is only returned if `plot_progress` is `True`.
+    """
+    K = centroids.shape[0]
+    idx = None
+    idx_history = []
+    centroid_history = []
+
+    for i in range(max_iters):
+        idx = findClosestCentroids(X, centroids)
+
+        if plot_progress:
+            idx_history.append(idx)
+            centroid_history.append(centroids)
+
+        centroids = computeCentroids(X, idx, K)
+
+    if plot_progress:
+        fig = pyplot.figure()
+        anim = FuncAnimation(fig, plotProgresskMeans,
+                             frames=max_iters,
+                             interval=500,
+                             repeat_delay=2,
+                             fargs=(X, centroid_history, idx_history))
+        return centroids, idx, anim
+
+    return centroids, idx
+
 
 def plotData(X, y, grid=False):
     """

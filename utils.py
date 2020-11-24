@@ -5,6 +5,8 @@ import numpy as np
 from scipy.io import loadmat
 from os.path import join
 from matplotlib import pyplot
+from matplotlib.animation import FuncAnimation
+import matplotlib as mpl
 
 def runkMeans(X, centroids, findClosestCentroids, computeCentroids,
               max_iters=10, plot_progress=False):
